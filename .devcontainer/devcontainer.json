@@ -1,0 +1,9 @@
+{
+  "name": "Hermes-Coding-Agent",
+  "customizations": {
+    "vscode": {
+      "extensions": ["joaompfp.hermes-ai-agent"]
+    }
+  },
+  "postCreateCommand": "bash ./.devcontainer/post-create.sh > /tmp/post-create.log"
+}
