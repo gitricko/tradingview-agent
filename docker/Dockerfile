@@ -45,6 +45,14 @@ RUN npm install -g omniroute@${OMNIROUTE_VERSION} && \
     mkdir -p /usr/local/lib/node_modules/omniroute/app/logs/application && \
     chown abc:abc -R /usr/local/lib/node_modules/omniroute /usr/local/bin/omniroute
 
+# Install code-server and start automatically when desktop loads
+ARG CODE_SERVER_VERSION
+RUN curl -fsSL https://code-server.dev/install.sh | sh -s -- --version=${CODE_SERVER_VERSION} --method=standalone --prefix=/usr/local && \
+    ln -fs /usr/local/lib/code-server-${CODE_SERVER_VERSION} /usr/local/lib/code-server && \
+    ln -fs /usr/local/lib/code-server/bin/code-server /usr/local/bin/code && \
+    rm -rf ~/.cache
+COPY default.conf /defaults/default.conf
+
 # Switch to the abc user and set zsh as the default shell for both root and abc
 RUN usermod -s $(which zsh) root; usermod -s $(which zsh) abc
 
