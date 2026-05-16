@@ -13,8 +13,12 @@ FROM node:${NODE_VERSION}-slim AS node-bin
 # Use your preferred Webtop flavor as the base (e.g., Ubuntu, Alpine)
 FROM lscr.io/linuxserver/webtop:ubuntu-mate
 
-# Install help utilities and clean up apt cache to reduce image size
-RUN apt-get update && apt-get install -y htop zsh && rm -rf /var/lib/apt/lists/*
+# Install help utilities, Firefox, and clean up apt cache to reduce image size
+# Remove Chromium if present (webtop includes it by default)
+RUN apt-get update && \
+    apt-get install -y htop zsh firefox && \
+    apt-get remove -y chromium chromium-browser chromium-common libchromium* 2>/dev/null || true && \
+    rm -rf /var/lib/apt/lists/*
 
 # Copy Node.js binaries and libraries
 COPY --from=node-bin --chown=abc:abc /usr/local/bin/node /usr/local/bin/
