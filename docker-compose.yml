@@ -1,0 +1,55 @@
+name: tradingview-agent
+services:
+  tradingview-agent:
+    # Uses the specific Ubuntu-based MATE tag from LinuxServer.io
+    image: ${DOCKER_URI:-ghcr.io/gitricko/tradingview-agent:latest}
+    container_name: tradingview-agent
+    
+    # Optional: Needed for some modern GUI apps to function properly on older hosts/kernels
+    # security_opt:
+    #   - seccomp:unconfined
+
+    environment:
+      # Set your User ID and Group ID to match the host user (run 'id $USER' in your terminal)
+      - PUID=${DOCKER_PUID:-501}
+      - PGID=${DOCKER_PGID:-20}
+      # Set your timezone
+      - TZ=America/New_York
+      # Optional: for reverse proxies
+      - SUBFOLDER=/
+    
+    volumes:
+      # Change /path/to/data to the directory on your host for persistent config/files
+      - tradingview-agent-config:/config
+      - .:/codespace
+      # Uncomment the next line if you want to run Docker inside Webtop
+      - /var/run/docker.sock:/var/run/docker.sock
+
+    ports:
+      # Access the Webtop GUI on port 3000 (http)
+      - 3000:3000
+      # tradingview-agent dashboard specific ports (adjust as needed)
+      - 9119:9119
+      # modelrelay specific ports (adjust as needed)
+      - 7352:7352
+      # OmniRoute specific ports (adjust as needed)
+      - 20128:20128
+      # Code-server specific ports (adjust as needed)
+      - 8888:8888
+    # Recommended to prevent modern web browsers from crashing
+    shm_size: "1gb" 
+    
+    # Ensures the container restarts automatically unless you explicitly stop it
+    restart: unless-stopped
+
+    networks:
+      - tradingview-agent-net
+
+networks:
+  tradingview-agent-net:
+    driver: bridge
+
+volumes:
+  tradingview-agent-config:
+    external: false
+    name: tradingview-agent-config

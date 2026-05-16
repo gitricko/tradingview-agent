@@ -1,0 +1,8 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Terminal=false
+Exec=/opt/TradingView/tradingview --no-sandbox --remote-debugging-port=9222 %U
+Name[en_US]=TradingView Agent
+Name=TradingView Agent
+GenericName[en_US.UTF-8]=TradingView Agent Launcher
