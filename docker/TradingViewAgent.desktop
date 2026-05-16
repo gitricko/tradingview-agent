@@ -2,7 +2,7 @@
 Version=1.0
 Type=Application
 Terminal=false
-Exec=mate-terminal --title="TradingView Agent" -e "bash -c 'hermes dashboard --host 0.0.0.0 --insecure --no-open'"
+Exec=/opt/TradingView/tradingview --no-sandbox %U
 Name[en_US]=TradingView Agent
 Name=TradingView Agent
 GenericName[en_US.UTF-8]=TradingView Agent Launcher
