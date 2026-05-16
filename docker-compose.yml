@@ -27,7 +27,7 @@ services:
 
     ports:
       # Access the Webtop GUI on port 3000 (http)
-      # - 3000:3000
+      - 3000:3000
       # tradingview-agent dashboard specific ports (adjust as needed)
       - 9119:9119
       # modelrelay specific ports (adjust as needed)
