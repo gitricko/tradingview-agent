@@ -88,11 +88,16 @@ RUN set -eux; \
 # https://www.tradingview.com/support/solutions/43000728898-how-to-install-and-update-desktop-app-on-linux/
 RUN echo "Installing TradingView Linux Desktop..." && \
     wget -O - https://tvd-packages.tradingview.com/keyring.gpg | tee /usr/share/keyrings/tradingview-desktop-archive-keyring.gpg >/dev/null && \
-    echo "deb [arch=amd64 signed-by=/usr/share/keyrings/tradingview-desktop-archive-keyring.gpg] https://tvd-packages.tradingview.com/ubuntu/stable jammy multiverse" | tee /etc/apt/sources.list.d/tradingview-desktop.list >/dev/null && \
-    apt-get update && apt-get install -y tradingview && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/* \
-    && chown -R abc:abc /opt/TradingView \
-    && echo "[TradingView] Installed successfully"
+        case "${TARGETARCH:-amd64}" in \
+            amd64) TV_ARCH=amd64 ;; \
+            arm64) TV_ARCH=arm64 ;; \
+            *) echo "Unsupported TARGETARCH for TradingView: ${TARGETARCH:-unknown}" >&2; exit 1 ;; \
+        esac && \
+        echo "deb [arch=${TV_ARCH} signed-by=/usr/share/keyrings/tradingview-desktop-archive-keyring.gpg] https://tvd-packages.tradingview.com/ubuntu/stable jammy multiverse" | tee /etc/apt/sources.list.d/tradingview-desktop.list >/dev/null && \
+        apt-get update && apt-get install -y tradingview && \
+        apt-get clean && \
+        rm -rf /var/lib/apt/lists/* && \
+        chown -R abc:abc /opt/TradingView && \
+        echo "[TradingView] Installed successfully"
 
 EXPOSE 8888
