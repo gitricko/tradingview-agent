@@ -87,8 +87,8 @@ RUN set -eux; \
 # Using TradingView's official repository per:
 # https://www.tradingview.com/support/solutions/43000728898-how-to-install-and-update-desktop-app-on-linux/
 RUN echo "Installing TradingView Linux Desktop..." && \
-    wget -O - https://tvd-packages.tradingview.com/keyring.gpg | sudo tee /usr/share/keyrings/tradingview-desktop-archive-keyring.gpg >/dev/null && \
-    echo "deb [arch=amd64 signed-by=/usr/share/keyrings/tradingview-desktop-archive-keyring.gpg] https://tvd-packages.tradingview.com/ubuntu/stable jammy multiverse" | sudo tee /etc/apt/sources.list.d/tradingview-desktop.list >/dev/null && \
+    wget -O - https://tvd-packages.tradingview.com/keyring.gpg | tee /usr/share/keyrings/tradingview-desktop-archive-keyring.gpg >/dev/null && \
+    echo "deb [arch=amd64 signed-by=/usr/share/keyrings/tradingview-desktop-archive-keyring.gpg] https://tvd-packages.tradingview.com/ubuntu/stable jammy multiverse" | tee /etc/apt/sources.list.d/tradingview-desktop.list >/dev/null && \
     apt-get update && apt-get install -y tradingview && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* \
