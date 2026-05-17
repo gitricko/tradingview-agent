@@ -101,6 +101,7 @@ RUN if [ "${TARGETARCH:-amd64}" != "arm64" ]; then \
         chown -R abc:abc /opt/TradingView && \
         echo "[TradingView] Installed successfully" \
 else \
-    echo "Skipping TradingView installation on unsupported architecture: ${TARGETARCH:-unknown}"
+    echo "Skipping TradingView installation on unsupported architecture: ${TARGETARCH:-unknown}" \
+fi
 
 EXPOSE 8888 3000
