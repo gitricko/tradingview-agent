@@ -84,27 +84,14 @@ RUN set -eux; \
 # ---------------------------------------------------------------------------
 # Install TradingView Linux Desktop
 # ---------------------------------------------------------------------------
-# URL discovered from TradingView's JS bundle:
-# https://tvd-packages.tradingview.com/ubuntu/stable/latest/jammy/tradingview_amd64.deb
-# ---------------------------------------------------------------------------
-# Install TradingView Linux Desktop
-# ---------------------------------------------------------------------------
 # Using TradingView's official repository per:
 # https://www.tradingview.com/support/solutions/43000728898-how-to-install-and-update-desktop-app-on-linux/
 RUN echo "Installing TradingView Linux Desktop..." && \
-    apt-get update && \
-    apt-get install -y --no-install-recommends \
-        apt-transport-https \
-        gnupg \
-        ca-certificates \
-    && apt-get clean && \
+    wget -O - https://tvd-packages.tradingview.com/keyring.gpg | sudo tee /usr/share/keyrings/tradingview-desktop-archive-keyring.gpg >/dev/null && \
+    echo "deb [arch=amd64 signed-by=/usr/share/keyrings/tradingview-desktop-archive-keyring.gpg] https://tvd-packages.tradingview.com/ubuntu/stable jammy multiverse" | sudo tee /etc/apt/sources.list.d/tradingview-desktop.list >/dev/null && \
+    apt-get update && apt-get install -y tradingview && \
+    apt-get clean && \
     rm -rf /var/lib/apt/lists/* \
-    && apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 6A4B8E6B3C8C2B4E \
-    && echo "deb https://tvd-packages.tradingview.com/stable/deb/ binary/" > /etc/apt/sources.list.d/tradingview.list \
-    && apt-get update && \
-    apt-get install -y --no-install-recommends tradingview \
-    && apt-get clean \
-    && rm -rf /var/lib/apt/lists/* \
     && chown -R abc:abc /opt/TradingView \
     && echo "[TradingView] Installed successfully"
 
