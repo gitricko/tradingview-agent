@@ -86,7 +86,8 @@ RUN set -eux; \
 # ---------------------------------------------------------------------------
 # Using TradingView's official repository per:
 # https://www.tradingview.com/support/solutions/43000728898-how-to-install-and-update-desktop-app-on-linux/
-RUN echo "Installing TradingView Linux Desktop..." && \
+RUN if [ "${TARGETARCH:-amd64}" != "arm64" ]; then \
+    echo "Installing TradingView Linux Desktop..." && \
     wget -O - https://tvd-packages.tradingview.com/keyring.gpg | tee /usr/share/keyrings/tradingview-desktop-archive-keyring.gpg >/dev/null && \
         case "${TARGETARCH:-amd64}" in \
             amd64) TV_ARCH=amd64 ;; \
@@ -99,5 +100,7 @@ RUN echo "Installing TradingView Linux Desktop..." && \
         rm -rf /var/lib/apt/lists/* && \
         chown -R abc:abc /opt/TradingView && \
         echo "[TradingView] Installed successfully"
+else \
+    echo "Skipping TradingView installation on unsupported architecture: ${TARGETARCH:-unknown}"
 
-EXPOSE 8888
+EXPOSE 8888 3000
