@@ -1,10 +1,10 @@
-ARG HERMES_VERSION="v2026.5.7"
+ARG HERMES_VERSION="v2026.5.29.2"
 ARG OMNIROUTE_VERSION=3.7.9
 ARG MODELRELAY_VERSION=1.17.1
-ARG OLLAMA_VERSION=0.21.0
+ARG OLLAMA_VERSION=0.24.0
 ARG NODE_VERSION=24
-ARG CODE_SERVER_VERSION=4.118.0
-ARG MNEMON_VERSION=0.1.3
+ARG CODE_SERVER_VERSION=4.122.0
+ARG MNEMON_VERSION=0.1.11
 ARG TARGETARCH
 
 # Use the official Ollama image to get the binary
@@ -16,12 +16,19 @@ FROM node:${NODE_VERSION}-slim AS node-bin
 # Use your preferred Webtop flavor as the base (e.g., Ubuntu, Alpine)
 FROM lscr.io/linuxserver/webtop:ubuntu-mate
 
-# Install help utilities, Firefox, and clean up apt cache to reduce image size
-# Remove Chromium if present (webtop includes it by default)
-RUN apt-get update && \
-    apt-get install -y htop zsh wget ripgrep firefox && \
-    apt-get remove -y chromium chromium-browser chromium-common libchromium* 2>/dev/null || true && \
-    rm -rf /var/lib/apt/lists/*
+# Add gh apt repository
+ARG TARGETARCH
+RUN GH_ARCH="${GH_ARCH:-${TARGETARCH:-amd64}}"; \
+    case "${GH_ARCH}" in \
+      amd64|x86_64) GH_ARCH=amd64 ;; \
+      arm64|aarch64) GH_ARCH=arm64 ;; \
+      *) echo "Unsupported GH_ARCH: ${GH_ARCH}" >&2; exit 1 ;; \
+    esac; \
+    curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | gpg --dearmor -o /usr/share/keyrings/githubcli-archive-keyring.gpg \
+    && echo "deb [arch=${GH_ARCH} signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" > /etc/apt/sources.list.d/github-cli.list 
+
+# Install help utilities and clean up apt cache to reduce image size
+RUN apt-get update && apt-get install -y htop zsh ripgrep gh firefox && rm -rf /var/lib/apt/lists/*
 
 # Copy Node.js binaries and libraries
 COPY --from=node-bin --chown=abc:abc /usr/local/bin/node /usr/local/bin/
@@ -36,8 +43,9 @@ RUN mkdir -p /custom-cont-init.d
 COPY --chown=abc:abc *.desktop /custom-cont-init.d
 COPY --chown=abc:abc *.sh /custom-cont-init.d
 COPY --chown=abc:abc *.json /custom-cont-init.d
+COPY --chown=abc:abc *.md /custom-cont-init.d
 
-# Install Hermes Agent (TradingView Edition)
+# Install Hermes
 ARG HERMES_VERSION
 RUN curl -fsSL "https://raw.githubusercontent.com/NousResearch/hermes-agent/${HERMES_VERSION}/scripts/install.sh" | bash -s -- --skip-setup && \
     npm cache clean --force && \
@@ -46,7 +54,8 @@ RUN curl -fsSL "https://raw.githubusercontent.com/NousResearch/hermes-agent/${HE
 
 # Install ModelRelay and start automatically when desktop loads
 ARG MODELRELAY_VERSION
-RUN npm install -g modelrelay@${MODELRELAY_VERSION} && \
+# RUN npm install -g modelrelay@${MODELRELAY_VERSION} && \
+RUN npm install -g github:gitricko/modelrelay && \
     npm cache clean --force && \
     chown abc:abc -R /usr/local/lib/node_modules/modelrelay /usr/local/bin/modelrelay
 
@@ -63,7 +72,8 @@ RUN curl -fsSL https://code-server.dev/install.sh | sh -s -- --version=${CODE_SE
     ln -fs /usr/local/lib/code-server-${CODE_SERVER_VERSION} /usr/local/lib/code-server && \
     ln -fs /usr/local/lib/code-server/bin/code-server /usr/local/bin/code && \
     rm -rf ~/.cache
-COPY default.conf /defaults/default.conf
+# Uncomment this when you want to use your own default.conf to route from your reverse proxy to code-server.  I rather use codeserver to route to WebTop port 3000
+#    COPY default.conf /defaults/default.conf
 
 # Switch to the abc user and set zsh as the default shell for both root and abc
 RUN usermod -s $(which zsh) root; usermod -s $(which zsh) abc
@@ -92,7 +102,7 @@ RUN set -eux; \
 # https://www.tradingview.com/support/solutions/43000728898-how-to-install-and-update-desktop-app-on-linux/
 RUN if [ "${TARGETARCH:-amd64}" != "arm64" ]; then \
     echo "Installing TradingView Linux Desktop..." && \
-    wget -O - https://tvd-packages.tradingview.com/keyring.gpg | tee /usr/share/keyrings/tradingview-desktop-archive-keyring.gpg >/dev/null && \
+    curl -fsSL https://tvd-packages.tradingview.com/keyring.gpg | tee /usr/share/keyrings/tradingview-desktop-archive-keyring.gpg >/dev/null && \
     echo "deb [arch=amd64 signed-by=/usr/share/keyrings/tradingview-desktop-archive-keyring.gpg] https://tvd-packages.tradingview.com/ubuntu/stable jammy multiverse" | tee /etc/apt/sources.list.d/tradingview-desktop.list >/dev/null && \
     apt-get update && apt-get install -y tradingview && \
     apt-get clean && \

@@ -2,46 +2,53 @@
 _Run TradingView Agent inside a browser-based Linux desktop with free LLM support through ModelRelay._
 
 <p align="center">
-  <strong>Your personal TradingView AI agent in the browser — no GPU required</strong>
+    <picture>
+        <img height="300" alt="tradingview-agent-title-logo" src="./docs/hermes-webtop-big.png" />
+    </picture>
 </p>
 
 <p align="center">
-<a href="LICENSE">
-    <img src="https://img.shields.io/github/license/gitricko/tradingview-agent" alt="License">
+  <strong>She will grow with you ...</strong>
+</p>
+
+<p align="center">
+<a href="https://github.com/intricko/tradingview-agent/actions/workflows/docker-publish.yml">
+    <img src="https://github.com/intricko/tradingview-agent/actions/workflows/docker-publish.yml/badge.svg" alt="Last Docker Image Push">
   </a>
-  <a href="https://github.com/gitricko/tradingview-agent/issues">
-    <img src="https://img.shields.io/github/issues/gitricko/tradingview-agent" alt="GitHub issues">
+  <a href="LICENSE">
+    <img src="https://img.shields.io/github/license/intricko/tradingview-agent" alt="License">
+  </a>
+  <a href="https://github.com/intricko/tradingview-agent/issues">
+    <img src="https://img.shields.io/github/issues/intricko/tradingview-agent" alt="GitHub issues">
   </a>
 </p>
 
-**TradingView-Agent** gives you a **fully functional TradingView Agent AI assistant** in your browser in under 10 minutes — no powerful PC, no Docker on your machine, no GPU required.
+**TradingView-Agent** gives you a **fully functional TradingView AI assistant** in your browser in under 10 minutes — no powerful PC, no Docker on your machine, no GPU required.
 
-Just open this repo in a GitHub Codespace and you get:
-- A complete Ubuntu MATE desktop (WebTop)
-- CodeServer at port 8888 with Hermes Extension installed and preconfigured
+Just open this repo in a GitHub Codespace, start the container and you will get:
+- A complete Ubuntu MATE desktop (WebTop) for computer use
+- CodeServer at port 8888 with Hermes + Claude Code (cli + vscode extension) installed and preconfigured
 - Ollama server pre-installed and auto-started
-- ModelRelay pre-installed, auto-started and pre-configured as default model
-- TradingView Agent dashboard accessible via desktop launcher
+- ModelRelay pre-installed, auto-started and pre-configured as default model for Hermes and Claude Code
+- **TradingView Linux Desktop** — ready to launch from the desktop or autostart
+- Hermes gateway accessible via desktop launcher
+- [Mnemon](https://github.com/mnemon-dev/mnemon) as your Hermes default [memory provider](https://github.com/gitricko/hermes-plugin-mnemon)
 - Persistent volume for your config and settings
 
 When you're ready to go production, simply move the same Docker setup to your own machine or VPS.
 
 ## ✨ Why This Exists
 
-TradingView Agent is an AI agent framework that connects LLMs directly to your communication platforms (WhatsApp, Telegram, Slack, Discord, etc.) and can run cron jobs, spawn sub-agents, speak/listen, and give you a beautiful dashboard.
+Hermes is an AI agent framework that connects LLMs directly to your communication platforms (WhatsApp, Telegram, Slack, Discord, etc.) and can run cron jobs, spawn sub-agents, speak/listen, and give you a beautiful dashboard.
 
 The only catch? You normally need a dedicated machine with GPU.
 **TradingView-Agent removes that catch completely.**
 
 Perfect for:
 - Trying TradingView Agent risk-free
-- Free LLM APIs through [ModelRelay](https://github.com/ellipticmarketing/modelrelay)
-- Students / hackers / evaluators
-- Anyone who wants a personal AI assistant without breaking the bank
-
-## 📸 Demo
-
-(Demo video coming soon)
+- Free LLM APIs through [ModelRelay](https://github.com/ellipticmarketing/modelrelay) or [OmniRoute](https://github.com/diegosouzapw/OmniRoute)
+- Students / traders / evaluators
+- Anyone who wants a personal AI TradingView assistant without breaking the bank
 
 ## 🚀 Quick Start (5-10 minutes)
 
@@ -49,20 +56,38 @@ Perfect for:
 
    It is recommended that you use 4 cpu core and 16G codespace.
 
+   <img width="900" alt="launch-codespace" src="./docs/launch-codespace.gif">
+
 3. In the Codespace terminal run:
    ```bash
    make start
    ```
+   <img width="900" alt="launch-codespace" src="./docs/make-start.gif">
 
-4. Wait ~60 seconds. When the web desktop URL appears in the Codespace Ports tab, click it.
+4. Wait ~60 seconds after first launch. It takes about 5-7 minutes if docker image is not loaded yet. When the web desktop URL appears in the Codespace Ports tab, click it.
 
-5. Inside the WebTop desktop:
+   <img width="900" alt="launch-webtop-via-ports" src="./docs/launch-webtop-via-ports.png">
+   
+   __Demo on pre-installed WebApps__
+   
+   <img width="900" alt="End Results" src="./docs/working-vm.gif">
 
-   - You see `TradingView Agent` is already running
-   - Run `hermes` from the terminal; OR:
-   - Go to chromium at `http://localhost:9119` to access Hermes WebUI
-   - Recommendation to use CodeServer instead of WebTop
+5. Use VSCode on Web (Code-Server) to interact wit your agents:
 
+   - Interact with files system using VSCode on the browser
+   - Interact with Hermes Agent using VSCode Extension OR via hermes-cli in the VSCode Terminal
+   - Claude Code + Hermes (both using Terminal-Cli or VSCode Extension) shared the persistent memory via [mnemon](https://github.com/mnemon-dev/mnemon)  so that Hermes remembers what you did in Claude and vice-versa.
+   - Use WebTop interface in port 3000 when you need to do computer-use 
+
+   <img width="900" alt="End Results" src="./docs/working-hermes.gif">
+
+6. Configure your Hermes with your favourite messaging app !
+
+   - Recommendation: Watch Youtube ;-)
+
+7. Last NOTE:
+   - For localhost install.. just use http://localhost:[3000,8888,9119,7352,20128]
+     
 ## 🔧 Features
 
 - **Zero local install** — everything runs in browser via GitHub Codespaces
@@ -70,12 +95,15 @@ Perfect for:
 - **Persistent config** — docker volume backup and restore after Codespace recreation
 - **Easy backup/restore** — `make backup` / `make restore`
 - **One-command everything** — powerful Makefile + clean `docker-compose.yml`
-- **Auto-start ModelRelay** — Default configuration for Free LLM API
+- **Auto-start ModelRelay** — Default configuration for Free LLM API to Hermes
+- **Auto-start OmniRoute** — You need some configuration before it work but it is flexible and powerful
 - **Auto-start Ollama** — custom init script on WebTop boot
 - **Colima / local Docker support** ready
 - **Built-in code-server IDE** — browser-based VS Code on port `8888`
+- **Multiple AI VSCode Extension preinstall/config with ModelRelay** - Cline, Hermes and ClaudeCode
+- **Mnemon as default memory provider** - a knowledge store for Hermes with intent-aware recall, importance decay, and auto-deduplication
 
-## 🧑‍💻 Built-in code-server IDE
+## 🧑‍💻 Built-in code-server IDE (VSCode on the Web - Interface to Agent)
 
 This image includes `code-server` and exposes it on port `8888`.
 
@@ -87,8 +115,8 @@ This image includes `code-server` and exposes it on port `8888`.
 > Note: this setup may use `code-server --auth none` in development, so keep port `8888` private. For local production use, secure it with an authenticated reverse proxy or firewall.
 
 - Hermes Agent's Extension is preinstalled and configured in VSCode
-- Cline Extension is also preinstall and configured to ModelRelay
-- Start Hacking away in VSCode, use WebTop if you need to monitor agent do desktop-use operations. eg: Non-Headless Chrome debugging for instance.
+- Claude Code Extension is also preinstall and configured to ModelRelay
+- Start Hacking away in VSCode, use WebTop if you need to monitor agent do desktop-use operations. eg: Non-Headless Chrome debugging for instance / Linux Computer-Use
 
 ## 🔒 Security: Protected by GitHub Authentication
 
@@ -124,8 +152,8 @@ Your configuration and settings are persisted in a Docker volume.
 The project includes convenient `make` targets to back up and restore this data in codespace:
 
 ```bash
-make backup          # creates backup/tradingview-agent_config_backup.tar.gz
-make restore         # restores from backup/tradingview-agent_config_backup.tar.gz
+make backup          # creates backup/hermes_config_backup.tar.gz
+make restore         # restores from backup/hermes_config_backup.tar.gz
 ```
 
 ### When to Use It
@@ -137,7 +165,7 @@ make restore         # restores from backup/tradingview-agent_config_backup.tar.
 ### How to Migrate to a New Environment
 
 - In your current environment, run `make backup`.
-- Download the generated file: `backup/tradingview-agent_config_backup.tar.gz`.
+- Download the generated file: `backup/hermes_config_backup.tar.gz`.
 - Place the file in the `backup/` folder of the new environment.
 - Run `make restore`.
 
@@ -152,25 +180,12 @@ make build-local             # especially if you modified the ./docker/Dockerfil
 make start-locally-baked     # start from your local baked image
 ```
 
-## ⚠️ Current Limitations (honest)
-
-- GitHub Codespaces free tier has monthly limits (great for testing, less ideal for 24/7 as Codespace auto-shutdown during inactivity)
-- Ollama cloud [credits](https://ollama.com/settings) are daily — heavy use will push you to paid/local models. Or if you have multiple accounts, just `ollama signout` and `ollama signin` with different account.
-- Browser desktop has slight latency vs native (expected). You can shutdown your codespace and [change](https://docs.github.com/en/codespaces/customizing-your-codespace/changing-the-machine-type-for-your-codespace) to 4-core codespace to improve responsiveness or the need to run heavy applications.
-
-## 🛣️ Roadmap
-
-- [ ] More screenshots + video demo
-- [ ] Pre-built Docker image tags for stable releases
-- [ ] Community templates (Telegram-only, WhatsApp-only, etc.)
-- [ ] One-click "deploy to VPS" guide (Railway / Fly.io / cheap VPS)
-
 ## 🤝 Contributing
 
 This is a community project — every star, issue, or PR helps enormously!
 Feel free to open issues for bugs or feature requests.
 
-[![Star History Chart](https://api.star-history.com/svg?repos=gitricko/tradingview-agent&type=date&legend=top-left)](https://star-history.com/#gitricko/tradingview-agent&type=date&legend=top-left)
+[![Star History Chart](https://api.star-history.com/svg?repos=intricko/tradingview-agent&type=date&legend=top-left)](https://star-history.com/#intricko/tradingview-agent&type=date&legend=top-left)
 
 ## 📄 License
 

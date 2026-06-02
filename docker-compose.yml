@@ -1,3 +1,4 @@
+
 name: tradingview-agent
 services:
   tradingview-agent:
@@ -10,6 +11,7 @@ services:
     #   - seccomp:unconfined
 
     environment:
+      # - PATH=/config/.local/bin:${PATH}
       # Set your User ID and Group ID to match the host user (run 'id $USER' in your terminal)
       - PUID=${DOCKER_PUID:-501}
       - PGID=${DOCKER_PGID:-20}
@@ -26,9 +28,9 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
 
     ports:
-      # Access the Webtop GUI on port 3000 (http)
+      # Access the Webtop GUI on port 3000 (http) ~ this is turn off becos you can access via ports 3000 from code-server
       - 3000:3000
-      # tradingview-agent dashboard specific ports (adjust as needed)
+      # hermes dashboard specific ports (adjust as needed)
       - 9119:9119
       # modelrelay specific ports (adjust as needed)
       - 7352:7352

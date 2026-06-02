@@ -7,7 +7,7 @@ add_model_if_missing() {
     local file="$1"
 
     if ! jq -e '.model_list | any(.model_name == "modelrelay")' "$file" > /dev/null; then
-        echo "[start-2-modelrelay] Adding modelrelay model to $file"
+        echo "[start-modelrelay] Adding modelrelay model to $file"
         jq '.model_list += [{
           "model_name": "modelrelay",
           "model": "openai/auto-fastest",
@@ -17,7 +17,7 @@ add_model_if_missing() {
 
     # Set modelrelay as default for agents if not default was set
     if jq -e '.agents.defaults.model_name | select(. == null or . == "")' "$file" > /dev/null; then
-        echo "[start-2-modelrelay] Setting modelrelay as defaults for agents in $file"
+        echo "[start-modelrelay] Setting modelrelay as defaults for agents in $file"
         jq '.agents |= (. // {}) | .agents.defaults |= (. // {}) | .agents.defaults.model_name = "modelrelay"' "$file" > "${file}.tmp" && mv "${file}.tmp" "$file"
     fi
 

@@ -1,0 +1,55 @@
+{
+  "env": {
+    "ANTHROPIC_API_KEY": "sk-whatever",
+    "ANTHROPIC_BASE_URL": "http://localhost:7352",
+    "ANTHROPIC_MODEL": "claude-sonnet-4-5"
+  },
+  "permissions": {
+    "defaultMode": "bypassPermissions",
+    "allow": [
+      "Bash(mnemon *)",
+      "Skill(update-config)",
+      "Bash(git *)",
+      "Bash(npm *)",
+      "Read(*)",
+      "Write(*)",
+      "Edit(*)",
+      "Bash(ls *)",
+      "Bash(cd *)"
+    ]
+  },
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/config/.claude/hooks/mnemon/prime.sh"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/config/.claude/hooks/mnemon/stop.sh"
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/config/.claude/hooks/mnemon/user_prompt.sh"
+          }
+        ]
+      }
+    ]
+  },
+  "theme": "dark",
+  "skipDangerousModePermissionPrompt": true
+}
