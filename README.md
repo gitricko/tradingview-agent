@@ -2,13 +2,11 @@
 _Run TradingView Agent inside a browser-based Linux desktop with free LLM support through ModelRelay._
 
 <p align="center">
-    <picture>
-        <img height="300" alt="tradingview-agent-title-logo" src="./docs/hermes-webtop-big.png" />
-    </picture>
+    <img width="900" alt="tradingview-agent-title-logo" src="/docs/tradingview-with-claude.gif">
 </p>
 
 <p align="center">
-  <strong>She will grow with you ...</strong>
+  <strong>Chart Analysis and Pine Script coding will never be the same ...</strong>
 </p>
 
 <p align="center">
@@ -23,32 +21,16 @@ _Run TradingView Agent inside a browser-based Linux desktop with free LLM suppor
   </a>
 </p>
 
-**TradingView-Agent** gives you a **fully functional TradingView AI assistant** in your browser in under 10 minutes — no powerful PC, no Docker on your machine, no GPU required.
+**TradingView-Agent** gives you a **fully functional TradingView AI assistant** in your browser with Hermes-CLI or Claude Code CLI in under 10 minutes — no powerful PC, no Docker on your machine, no GPU required.
 
 Just open this repo in a GitHub Codespace, start the container and you will get:
-- A complete Ubuntu MATE desktop (WebTop) for computer use
-- CodeServer at port 8888 with Hermes + Claude Code (cli + vscode extension) installed and preconfigured
-- Ollama server pre-installed and auto-started
-- ModelRelay pre-installed, auto-started and pre-configured as default model for Hermes and Claude Code
-- **TradingView Linux Desktop** — ready to launch from the desktop or autostart
-- Hermes gateway accessible via desktop launcher
-- [Mnemon](https://github.com/mnemon-dev/mnemon) as your Hermes default [memory provider](https://github.com/gitricko/hermes-plugin-mnemon)
-- Persistent volume for your config and settings
+- All the goodness of [Hermes-Webtop](https://github.com/gitricko/hermes-webtop) because it is a copy clone of it plus...
+- A preconfigured and installed TradingView Desktop with CDP enabled in Ubuntu MATE desktop (WebTop) for agentic automation
+- Just open the webtop at port 3000 and following the prompts from these repositories:
+  - https://github.com/LewisWJackson/tradingview-mcp-jackson#one-shot-setup
+  - https://github.com/jackson-video-resources/claude-tradingview-mcp-trading
 
-When you're ready to go production, simply move the same Docker setup to your own machine or VPS.
-
-## ✨ Why This Exists
-
-Hermes is an AI agent framework that connects LLMs directly to your communication platforms (WhatsApp, Telegram, Slack, Discord, etc.) and can run cron jobs, spawn sub-agents, speak/listen, and give you a beautiful dashboard.
-
-The only catch? You normally need a dedicated machine with GPU.
-**TradingView-Agent removes that catch completely.**
-
-Perfect for:
-- Trying TradingView Agent risk-free
-- Free LLM APIs through [ModelRelay](https://github.com/ellipticmarketing/modelrelay) or [OmniRoute](https://github.com/diegosouzapw/OmniRoute)
-- Students / traders / evaluators
-- Anyone who wants a personal AI TradingView assistant without breaking the bank
+Will be interested to see how you might automate research and analysis of trade with this.
 
 ## 🚀 Quick Start (5-10 minutes)
 
@@ -72,21 +54,10 @@ Perfect for:
    
    <img width="900" alt="End Results" src="./docs/working-vm.gif">
 
-5. Use VSCode on Web (Code-Server) to interact wit your agents:
+5. Open WebTop on a browser - port 3000
 
-   - Interact with files system using VSCode on the browser
-   - Interact with Hermes Agent using VSCode Extension OR via hermes-cli in the VSCode Terminal
-   - Claude Code + Hermes (both using Terminal-Cli or VSCode Extension) shared the persistent memory via [mnemon](https://github.com/mnemon-dev/mnemon)  so that Hermes remembers what you did in Claude and vice-versa.
-   - Use WebTop interface in port 3000 when you need to do computer-use 
-
-   <img width="900" alt="End Results" src="./docs/working-hermes.gif">
-
-6. Configure your Hermes with your favourite messaging app !
-
-   - Recommendation: Watch Youtube ;-)
-
-7. Last NOTE:
-   - For localhost install.. just use http://localhost:[3000,8888,9119,7352,20128]
+   - Open a terminal and use your favorite agent CLI. It could `hermes` or `claude`
+   - Type in your prompts as per the youtube/github instructions and start from there.
      
 ## 🔧 Features
 
@@ -102,21 +73,6 @@ Perfect for:
 - **Built-in code-server IDE** — browser-based VS Code on port `8888`
 - **Multiple AI VSCode Extension preinstall/config with ModelRelay** - Cline, Hermes and ClaudeCode
 - **Mnemon as default memory provider** - a knowledge store for Hermes with intent-aware recall, importance decay, and auto-deduplication
-
-## 🧑‍💻 Built-in code-server IDE (VSCode on the Web - Interface to Agent)
-
-This image includes `code-server` and exposes it on port `8888`.
-
-- `code-server` is installed automatically in the container.
-- The desktop launcher `CodeServer` starts it inside the WebTop environment.
-- In Codespaces, use the forwarded private port `8888`.
-- Locally, open `http://localhost:8888`.
-
-> Note: this setup may use `code-server --auth none` in development, so keep port `8888` private. For local production use, secure it with an authenticated reverse proxy or firewall.
-
-- Hermes Agent's Extension is preinstalled and configured in VSCode
-- Claude Code Extension is also preinstall and configured to ModelRelay
-- Start Hacking away in VSCode, use WebTop if you need to monitor agent do desktop-use operations. eg: Non-Headless Chrome debugging for instance / Linux Computer-Use
 
 ## 🔒 Security: Protected by GitHub Authentication
 
